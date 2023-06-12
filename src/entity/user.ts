@@ -1,6 +1,7 @@
 // user-entity.ts
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Order} from "./order";
+import { Home } from "./home";
 
 @Entity()
 export class User {
@@ -16,4 +17,6 @@ export class User {
     role: string;
     @OneToMany(() => Order, (order) => order.user)
     orders: Order[];
+    @OneToMany( () => Home, (home) => home.user)
+    homes: Home[]
 }

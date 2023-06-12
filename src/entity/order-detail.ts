@@ -14,7 +14,7 @@ export class OrderDetail {
     @Column()
     statusOrder: string;
     @ManyToOne(() => Order,(order) => order.idOrder)
-    idOrder: Order;
+    order: Order;
     @ManyToOne(() => Home,(home) => home.idHome)
     idHome: Home;
 }
