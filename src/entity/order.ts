@@ -7,7 +7,7 @@ import {OrderDetail} from "./order-detail";
 export class Order {
     @PrimaryGeneratedColumn()
     idOrder: number;
-    @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order)
+    @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.idOrderDetail)
     orderDetails: OrderDetail[];
     @ManyToOne(() => User, (user) => user.orders)
     user: User;

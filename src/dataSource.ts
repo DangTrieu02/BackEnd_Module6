@@ -3,11 +3,11 @@ import { DataSource } from "typeorm"
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: "127.0.0.1",
+    host: "localhost",
     port: 3306,
     username: "root",
     password: "123456",
-    database: "caseMd6",
+    database: "case_md6",
     synchronize: true,
-    entities: ["dist/entity/*.js"]
+    entities: ["dist/src/entity/*.js"]
 })
