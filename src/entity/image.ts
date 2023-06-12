@@ -1,6 +1,6 @@
 // image-entity.ts
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {Home} from "./Home";
+import {Home} from "./home";
 
 @Entity()
 export class User {
