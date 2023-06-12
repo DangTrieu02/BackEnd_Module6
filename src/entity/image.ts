@@ -1,13 +1,14 @@
 // image-entity.ts
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {Home} from "./Home";
+import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Home} from "./home";
 
 @Entity()
-export class User {
+export class Image {
     @PrimaryGeneratedColumn()
     idImage: number;
     @Column()
-    username: string;
-    @OneToMany(() => Home, (home) => home.idHome)
-    idHome: Home[];
+    image: string;
+    @ManyToOne(() => Home, (home) => home.image)
+    @JoinColumn()
+    home: Home
 }
