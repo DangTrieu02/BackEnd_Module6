@@ -41,5 +41,18 @@ class  userService{
             }
         }
     }
+
+    register = async (user)=>{
+        await this.userRepository.save(user)
+    }
+
+    findOne = async (userName) => {
+        let userFind = await this.userRepository.findOne({
+            where: {
+                username: userName,
+            }
+        });
+        return userFind;
+    } 
 }
 export  default new userService()
