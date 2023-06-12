@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import UserService from "../service/userService";
-
+import bcrypt from "bcrypt";
 class UserController {
     private userService;
 
@@ -20,6 +20,23 @@ class UserController {
             res.status(500).json(err.message);
         }
     }
+    register = async (req: Request, res: Response) => {
+        try {
+          let user = req.body;
+          let userFind = await this.userService.findOne(req.body.username);
+          if (userFind) {
+            res.status(200).json({ message: "User name already used" });
+          } else {
+            user.password = await bcrypt.hash(user.password, 10);
+            let newUser = await this.userService.register(user);
+            res
+              .status(201)
+              .json({ newUser: newUser, message: "Register successfully" });
+          }
+        } catch (err) {
+            console.log(err);
+        }
+      };
 }
 
 export default new UserController()

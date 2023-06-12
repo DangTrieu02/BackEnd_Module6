@@ -16,8 +16,8 @@ class userService {
         if (!userCheck) {
             return "user not found";
         } else {
-            let password = await this.userRepository.findOneBy({password: user.password})
-            if (!password) {
+            let passwordCompare = await bcrypt.compare(user.password, userCheck.password)
+            if (!passwordCompare) {
                 return "wrong password"
             } else {
                 let payload = {
@@ -42,6 +42,19 @@ class userService {
             }
         }
     }
+
+    register = async (user)=>{
+        await this.userRepository.save(user)
+    }
+
+    findOne = async (userName) => {
+        let userFind = await this.userRepository.findOne({
+            where: {
+                username: userName,
+            }
+        });
+        return userFind;
+    } 
 }
 
 export default new userService()
