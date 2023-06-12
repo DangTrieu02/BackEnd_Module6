@@ -16,6 +16,10 @@ export class User {
     @Column()
     password: string;
     @Column()
+    fullName: string;
+    @Column()
+    phoneNumber: number;
+    @Column({default: 'none'})
     avatar: string;
     @Column({default: 'user'})
     role: string;
