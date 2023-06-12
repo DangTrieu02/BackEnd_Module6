@@ -15,7 +15,7 @@ export class User {
     fullName: string;
     @Column()
     phoneNumber: number;
-    @Column()
+    @Column({default: 'none'})
     avatar: string;
     @Column({default: 'user'})
     role: string;
