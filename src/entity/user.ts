@@ -8,6 +8,10 @@ export class User {
     @PrimaryGeneratedColumn()
     idUser: number;
     @Column()
+    fullName: string;
+    @Column()
+    phoneNumber: number;
+    @Column()
     username: string;
     @Column()
     password: string;
