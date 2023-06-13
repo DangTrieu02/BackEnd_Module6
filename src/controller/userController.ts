@@ -1,6 +1,6 @@
 // userController.ts
 import { Request, Response } from "express";
-import UserService from "../service/userService";
+import UserService from "../services/userService";
 import bcrypt from "bcrypt";
 
 class UserController {
