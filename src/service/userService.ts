@@ -1,24 +1,25 @@
-import {User} from "../entity/user";
-import {AppDataSource} from "../dataSource";
+// userService.ts
+import { User } from "../entity/user";
+import { AppDataSource } from "../dataSource";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {SECRET} from "../middleware/auth";
 
-class userService {
-    private userRepository
+class UserService {
+    private userRepository;
 
     constructor() {
         this.userRepository = AppDataSource.getRepository(User);
     }
 
     checkUser = async (user) => {
-        let userCheck = await this.userRepository.findOneBy({username: user.username})
+        let userCheck = await this.userRepository.findOneBy({ username: user.username });
         if (!userCheck) {
             return "user not found";
         } else {
-            let passwordCompare = await bcrypt.compare(user.password, userCheck.password)
+            let passwordCompare = await bcrypt.compare(user.password, userCheck.password);
             if (!passwordCompare) {
-                return "wrong password"
+                return "wrong password";
             } else {
                 let payload = {
                     idUser: userCheck.idUser,
@@ -26,10 +27,10 @@ class userService {
                     fullName: userCheck.fullName,
                     phoneNumber: userCheck.phoneNumber,
                     role: userCheck.role
-                }
+                };
                 const token = jwt.sign(payload, SECRET, {
                     expiresIn: 3600000
-                })
+                });
                 let userRes = {
                     idUser: userCheck.idUser,
                     username: userCheck.username,
@@ -37,15 +38,15 @@ class userService {
                     fullName: userCheck.fullName,
                     phoneNumber: userCheck.phoneNumber,
                     token: token
-                }
-                return userRes
+                };
+                return userRes;
             }
         }
-    }
+    };
 
-    register = async (user)=>{
-        await this.userRepository.save(user)
-    }
+    register = async (user) => {
+        await this.userRepository.save(user);
+    };
 
     findOne = async (userName) => {
         let userFind = await this.userRepository.findOne({
@@ -54,12 +55,10 @@ class userService {
             }
         });
         return userFind;
-    }
+    };
 
     changePassword = async (userId: number, currentPassword: string, newPassword: string) => {
-        const user = await this.userRepository.findOne({ where:
-                { idUser: userId}
-        });
+        const user = await this.userRepository.findOne({ where: { idUser: userId } });
         if (!user) {
             throw new Error("User not found");
         }
@@ -76,6 +75,9 @@ class userService {
         await this.userRepository.save(user);
     };
 
+    update = async (user: User) => {
+        await this.userRepository.save(user);
+    };
 }
 
-export default new userService()
+export default new UserService();
