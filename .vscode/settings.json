@@ -1,4 +1,7 @@
 {
+    "cSpell.words": [
+        "casemd"
+    ],
     "sqltools.connections": [
         {
             "mysqlOptions": {
@@ -9,7 +12,7 @@
             "port": 3306,
             "driver": "MySQL",
             "name": "anhtran",
-            "database": "caseMd6",
+            "database": "casemd6",
             "username": "root",
             "password": "123456"
         }
