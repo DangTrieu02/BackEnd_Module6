@@ -37,6 +37,17 @@ class UserController {
             console.log(err);
         }
       };
-}
 
+    loginWithGG = async (req: Request, res: Response) => {        
+        let user= {
+            username : req.body.email,
+            password : 0,
+            fullName : req.body.name,
+            avatar : req.body.picture,
+            phoneNumber : 0
+        }
+        let token = await this.userService.loginWithGoogle(user)
+        return res.status(200).json(token)
+    }
+}
 export default new UserController()

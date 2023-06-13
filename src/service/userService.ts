@@ -55,6 +55,45 @@ class userService {
         });
         return userFind;
     } 
+
+    checkAcc= async (user) => {
+        try {
+            let payload = {
+                idUser: user.idUser,
+                username: user.username,
+                fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
+                role: user.role
+            }
+            const token = jwt.sign(payload, SECRET, {
+                expiresIn: 3600000
+            })
+            let userRes = {
+                idUser: user.idUser,
+                username: user.username,
+                role: user.role,
+                fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
+                token: token
+            }
+            return userRes
+        }catch (err) {
+            console.log(err.message);
+        }
+    }
+
+    loginWithGoogle = async (user) => {
+        let isExist = await this.userRepository.findOne({where: {
+            username: user.username,
+        }})
+        if (isExist) {
+            return await this.checkAcc(user)
+        } else {
+            await this.register(user)
+            return await this.checkAcc(user)
+        }
+    }
+
 }
 
 export default new userService()
