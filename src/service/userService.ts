@@ -53,6 +53,32 @@ class  userService{
             }
         });
         return userFind;
-    } 
+    }
+    changePassword = async (userId: number, currentPassword: string, newPassword: string) => {
+        const data = await this.userRepository.find({idUser: userId});
+        const user = data[0]
+        if (!user) {
+            throw new Error("User not found");
+        }
+        const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+        if (!isPasswordCorrect) {
+            throw new Error("Incorrect current password");
+        }
+        if (currentPassword === newPassword) {
+            throw new Error("New password must be different from the current password");
+        }
+        // Add additional password validation logic if necessary
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await this.userRepository.save(user);
+    };
+    getAllUsers = async () => {
+        return this.userRepository.find();
+    }
+
+    getUserById = async (userId: number) => {
+        return this.userRepository.findOne(userId);
+    }
 }
 export  default new userService()
+
