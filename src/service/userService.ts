@@ -4,14 +4,13 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {SECRET} from "../middleware/auth";
 
-class userService {
+class  userService{
     private userRepository
 
     constructor() {
-        this.userRepository = AppDataSource.getRepository(User);
+        this.userRepository= AppDataSource.getRepository(User);
     }
-
-    checkUser = async (user) => {
+    checkUser= async(user)=> {
         let userCheck = await this.userRepository.findOneBy({username: user.username})
         if (!userCheck) {
             return "user not found";
@@ -95,5 +94,4 @@ class userService {
     }
 
 }
-
-export default new userService()
+export  default new userService()
