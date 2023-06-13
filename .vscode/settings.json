@@ -1,0 +1,20 @@
+{
+    "cSpell.words": [
+        "casemd"
+    ],
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "anhtran",
+            "database": "casemd6",
+            "username": "root",
+            "password": "123456"
+        }
+    ]
+}
