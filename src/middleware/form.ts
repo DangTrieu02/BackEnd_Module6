@@ -27,7 +27,7 @@ export const checkRegister = (req, res, next) => {
         res.status(209).json({message:"mật khẩu phải dài từ 6 đến 32 ký tự !"});
     }
     else if(checkLengthPhoneNumber(phoneNumber)){
-        res.status(209).json({message:"số điện thoại phải dài từ 10 đến 12 số !"});
+        res.status(209).json({message:"số điện thoại phải dài từ 9 đến 12 số !"});
     }
     else{
         next()
