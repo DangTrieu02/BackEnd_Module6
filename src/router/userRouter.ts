@@ -5,5 +5,6 @@ import { checkRegister } from '../middleware/form';
 export const userRouter = Router();
 
 userRouter.post("/login",userController.login)
+userRouter.post("/login-google",userController.loginWithGG)
 userRouter.post('/register', checkRegister, userController.register)
 userRouter.put('/change-password/:idUser', userController.changePassword);

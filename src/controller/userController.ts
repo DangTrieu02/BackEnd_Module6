@@ -25,7 +25,7 @@ class UserController {
           let user = req.body;
           let userFind = await this.userService.findOne(req.body.username);
           if (userFind) {
-            res.status(200).json({ message: "User name already used" });
+            res.status(209).json({ message: "User name already used" });
           } else {
             user.password = await bcrypt.hash(user.password, 10);
             let newUser = await this.userService.register(user);
@@ -64,4 +64,16 @@ class UserController {
 
 }
 
+    loginWithGG = async (req: Request, res: Response) => {
+        let user = {
+            username: req.body.email,
+            password: 0,
+            fullName: req.body.name,
+            avatar: req.body.picture,
+            phoneNumber: 0
+        }
+        let token = await this.userService.loginWithGoogle(user)
+        return res.status(200).json(token)
+    }
+}
 export default new UserController()
