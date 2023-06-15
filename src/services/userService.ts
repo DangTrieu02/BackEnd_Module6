@@ -55,7 +55,7 @@ class userService {
         }
     }
 
-    register = async (user)=>{
+    register = async (user) => {
         await this.userRepository.save(user)
     }
 
@@ -68,8 +68,9 @@ class userService {
     }
 
     changePassword = async (userId: number, currentPassword: string, newPassword: string) => {
-        const user = await this.userRepository.findOne({ where:
-                { idUser: userId}
+        const user = await this.userRepository.findOne({
+            where:
+                {idUser: userId}
         });
         if (!user) {
             throw new Error("User not found");
@@ -83,7 +84,7 @@ class userService {
     };
 
 
-    checkAcc= async (user) => {
+    checkAcc = async (user) => {
         try {
             let payload = {
                 idUser: user.idUser,
@@ -104,15 +105,17 @@ class userService {
                 token: token
             }
             return userRes
-        }catch (err) {
+        } catch (err) {
             console.log(err.message);
         }
     }
 
     loginWithGoogle = async (user) => {
-        let isExist = await this.userRepository.findOne({where: {
-            username: user.username,
-        }})
+        let isExist = await this.userRepository.findOne({
+            where: {
+                username: user.username,
+            }
+        })
         if (isExist) {
             return await this.checkAcc(user)
         } else {
@@ -120,7 +123,7 @@ class userService {
             return await this.checkAcc(user)
         }
     }
-    getMyProfile = async (idUser)=>{
+    getMyProfile = async (idUser) => {
         let user = await this.userRepository.findOneBy({idUser: idUser})
         return user
     }

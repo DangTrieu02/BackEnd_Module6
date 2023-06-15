@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import userService from "../services/userService";
 import bcrypt from "bcrypt";
+
 class UserController {
     private userService;
 
@@ -26,13 +27,13 @@ class UserController {
             let user = req.body;
             let userFind = await this.userService.findOne(req.body.username);
             if (userFind) {
-                res.status(200).json({ message: "User name already used" });
+                res.status(200).json({message: "User name already used"});
             } else {
                 user.password = await bcrypt.hash(user.password, 10);
                 let newUser = await this.userService.register(user);
                 res
                     .status(201)
-                    .json({ newUser: newUser, message: "Register successfully" });
+                    .json({newUser: newUser, message: "Register successfully"});
             }
         } catch (err) {
             console.log(err);
@@ -41,63 +42,63 @@ class UserController {
 
     changePassword = async (req: any, res: Response) => {
         try {
-            const { currentPassword, newPassword, confirmNewPassword } = req.body;
+            const {currentPassword, newPassword, confirmNewPassword} = req.body;
             if (!currentPassword || !newPassword || !confirmNewPassword) {
                 return res
                     .status(400)
-                    .json({ message: "Please provide current password, new password, and confirm new password" });
+                    .json({message: "Please provide current password, new password, and confirm new password"});
             }
             if (newPassword !== confirmNewPassword) {
-                return res.status(400).json({ message: "New password and confirm new password do not match" });
+                return res.status(400).json({message: "New password and confirm new password do not match"});
             }
 
             const userId = Number(req.decoded.idUser); // Convert the idUser from string to number
 
             await this.userService.changePassword(userId, currentPassword, newPassword);
 
-            return res.status(200).json({ message: "Password changed successfully" });
+            return res.status(200).json({message: "Password changed successfully"});
         } catch (error) {
             console.log(error)
             if (error.message === "User not found") {
-                return res.status(404).json({ message: "User not found" });
+                return res.status(404).json({message: "User not found"});
             }
             if (error.message === "Incorrect current password") {
-                return res.status(400).json({ message: "Incorrect current password" });
+                return res.status(400).json({message: "Incorrect current password"});
             }
-            return res.status(500).json({ message: "Internal server error" });
+            return res.status(500).json({message: "Internal server error"});
         }
     };
 
     loginWithGG = async (req: Request, res: Response) => {
-        let user= {
-            username : req.body.email,
-            password : 0,
-            fullName : req.body.name,
-            avatar : req.body.picture,
-            phoneNumber : 0
+        let user = {
+            username: req.body.email,
+            password: 0,
+            fullName: req.body.name,
+            avatar: req.body.picture,
+            phoneNumber: 0
         }
         let token = await this.userService.loginWithGoogle(user)
         return res.status(200).json(token)
     }
 
-    editProfile = async (req:Request,res:Response) => {
-        try{
+    editProfile = async (req: Request, res: Response) => {
+        try {
             const id = req.params.idUser;
             const user = req.body;
-            await userService.update(id,user);
+            await userService.update(id, user);
             res.status(200).json('ok')
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err);
         }
     }
-    showMyProfile = async (req: Request, res: Response)=>{
+    showMyProfile = async (req: Request, res: Response) => {
         try {
             let response = await this.userService.getMyProfile(req.params.idUser)
             return res.status(200).json(response)
-        }catch (err){
+        } catch (err) {
             res.status(500).json(err.message)
         }
     }
 }
+
 export default new UserController()
