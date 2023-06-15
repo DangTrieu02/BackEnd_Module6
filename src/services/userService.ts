@@ -76,7 +76,7 @@ class userService {
         await this.userRepository.save(user);
     };
 
-    }
+
 
     checkAcc= async (user) => {
         try {
@@ -115,6 +115,23 @@ class userService {
             return await this.checkAcc(user)
         }
     }
+    getMyProfile = async (idUser)=>{
+        let user = await this.userRepository.findOneBy({idUser: idUser})
+        return user
+    }
+    update = async (idUser, User) => {
+        await this.userRepository.update(
+            {idUser}, {
+                username: User.username,
+                password: User.password,
+                avatar: User.avatar,
+                role: User.role,
+                fullName: User.fullName,
+                phoneNumber: User.phoneNumber
+            });
+    }
+
+
 
 }
 

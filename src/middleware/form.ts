@@ -37,6 +37,11 @@ export const checkRegister = (req, res, next) => {
   }
 
 };
+function checkSpecialCharacter(str: string): boolean {
+    const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+    return regex.test(str);
+}
+
 function checkSpecialCharacterOrNumber(str) {
     const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/]/;
     return regex.test(str);
