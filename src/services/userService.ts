@@ -1,27 +1,25 @@
-// userService.ts
 import {User} from "../entity/user";
 import {AppDataSource} from "../dataSource";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import {SECRET} from "../middleware/auth";
 
-class UserService {
-    private userRepository;
+class userService {
+    private userRepository
 
     constructor() {
         this.userRepository = AppDataSource.getRepository(User);
     }
 
     checkUser = async (user) => {
-        let userCheck = await this.userRepository.findOneBy({username: user.username});
 
+        let userCheck = await this.userRepository.findOneBy({username: user.username})
         if (!userCheck) {
             return "user not found";
         } else {
-            let passwordCompare = await bcrypt.compare(user.password, userCheck.password);
-
+            let passwordCompare = await bcrypt.compare(user.password, userCheck.password)
             if (!passwordCompare) {
-                return "wrong password";
+                return "wrong password"
             } else {
                 let isGoogleAccount = false;
 
@@ -43,7 +41,7 @@ class UserService {
                     expiresIn: 3600000,
                 });
 
-                let userRes = {
+                return {
                     idUser: userCheck.idUser,
                     username: userCheck.username,
                     role: userCheck.role,
@@ -53,24 +51,25 @@ class UserService {
                     isGoogleAccount: isGoogleAccount, // Add isGoogleAccount to the user response
                 };
 
-                return userRes;
             }
         }
-    };
+    }
 
-    register = async (user: User) => {
-        return this.userRepository.save(user);
-    };
+    register = async (user)=>{
+        await this.userRepository.save(user)
+    }
 
-    findOne = async (username: string) => {
-        return this.userRepository.findOneBy({username});
-    };
+    findOne = async (userName) => {
+        return await this.userRepository.findOne({
+            where: {
+                username: userName,
+            }
+        });
+    }
 
     changePassword = async (userId: number, currentPassword: string, newPassword: string) => {
-        const user = await this.userRepository.findOne({
-            where: {
-                idUser: userId
-            }
+        const user = await this.userRepository.findOne({ where:
+                { idUser: userId}
         });
         if (!user) {
             throw new Error("User not found");
@@ -83,33 +82,60 @@ class UserService {
         await this.userRepository.save(user);
     };
 
-    loginWithGoogle = async (user) => {
-        let userCheck = await this.userRepository.findOneBy({username: user.username});
-        if (!userCheck) {
-            userCheck = new User();
-            userCheck.username = user.username;
-            userCheck.password = "0";
-            userCheck.fullName = user.fullName;
-            userCheck.avatar = user.avatar;
-            userCheck.phoneNumber = 0;
-            await this.userRepository.save(userCheck);
+
+    checkAcc= async (user) => {
+        try {
+            let payload = {
+                idUser: user.idUser,
+                username: user.username,
+                fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
+                role: user.role
+            }
+            const token = jwt.sign(payload, SECRET, {
+                expiresIn: 3600000
+            })
+            let userRes = {
+                idUser: user.idUser,
+                username: user.username,
+                role: user.role,
+                fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
+                token: token
+            }
+            return userRes
+        }catch (err) {
+            console.log(err.message);
         }
+    }
 
-        let payload = {
-            idUser: userCheck.idUser,
-            username: userCheck.username,
-            fullName: userCheck.fullName,
-            phoneNumber: userCheck.phoneNumber,
-            role: userCheck.role,
-            isGoogleAccount: true, // Set isGoogleAccount to true
-        };
+    loginWithGoogle = async (user) => {
+        let isExist = await this.userRepository.findOne({where: {
+            username: user.username,
+        }})
+        if (isExist) {
+            return await this.checkAcc(user)
+        } else {
+            await this.register(user)
+            return await this.checkAcc(user)
+        }
+    }
+    getMyProfile = async (idUser)=>{
+        let user = await this.userRepository.findOneBy({idUser: idUser})
+        return user
+    }
+    update = async (idUser, User) => {
+        await this.userRepository.update(
+            {idUser}, {
+                username: User.username,
+                password: User.password,
+                avatar: User.avatar,
+                role: User.role,
+                fullName: User.fullName,
+                phoneNumber: User.phoneNumber
+            });
+    }
 
-        const token = jwt.sign(payload, SECRET, {
-            expiresIn: 3600000,
-        });
-
-        return token;
-    };
 }
 
-export default new UserService();
+export default new userService()
