@@ -1,9 +1,9 @@
 // userService.ts
-import { User } from "../entity/user";
-import { AppDataSource } from "../dataSource";
+import {User} from "../entity/user";
+import {AppDataSource} from "../dataSource";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { SECRET } from "../middleware/auth";
+import {SECRET} from "../middleware/auth";
 
 class UserService {
     private userRepository;
@@ -13,7 +13,7 @@ class UserService {
     }
 
     checkUser = async (user) => {
-        let userCheck = await this.userRepository.findOneBy({ username: user.username });
+        let userCheck = await this.userRepository.findOneBy({username: user.username});
 
         if (!userCheck) {
             return "user not found";
@@ -63,11 +63,15 @@ class UserService {
     };
 
     findOne = async (username: string) => {
-        return this.userRepository.findOneBy({ username });
+        return this.userRepository.findOneBy({username});
     };
 
     changePassword = async (userId: number, currentPassword: string, newPassword: string) => {
-        const user = await this.userRepository.findOne(userId);
+        const user = await this.userRepository.findOne({
+            where: {
+                idUser: userId
+            }
+        });
         if (!user) {
             throw new Error("User not found");
         }
@@ -80,7 +84,7 @@ class UserService {
     };
 
     loginWithGoogle = async (user) => {
-        let userCheck = await this.userRepository.findOneBy({ username: user.username });
+        let userCheck = await this.userRepository.findOneBy({username: user.username});
         if (!userCheck) {
             userCheck = new User();
             userCheck.username = user.username;

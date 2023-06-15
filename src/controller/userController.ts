@@ -42,7 +42,7 @@ class UserController {
         }
     };
 
-    changePassword = async (req: Request, res: Response) => {
+    changePassword = async (req: any, res: Response) => {
         try {
             const { currentPassword, newPassword, confirmNewPassword } = req.body;
             if (!currentPassword || !newPassword || !confirmNewPassword) {
@@ -53,7 +53,9 @@ class UserController {
             if (newPassword !== confirmNewPassword) {
                 return res.status(400).json({ message: "New password and confirm new password do not match" });
             }
-            const userId = Number(req.params.idUser); // Convert the idUser from string to number
+
+            const userId = Number(req.decoded.idUser); // Convert the idUser from string to number
+
             await UserService.changePassword(userId, currentPassword, newPassword);
             return res.status(200).json({ message: "Password changed successfully" });
         } catch (error) {
