@@ -25,7 +25,8 @@ class userService {
                     username: userCheck.username,
                     fullName: userCheck.fullName,
                     phoneNumber: userCheck.phoneNumber,
-                    role: userCheck.role
+                    role: userCheck.role,
+                    avatar: userCheck.avatar
                 }
                 const token = jwt.sign(payload, SECRET, {
                     expiresIn: 3600000
@@ -36,6 +37,7 @@ class userService {
                     role: userCheck.role,
                     fullName: userCheck.fullName,
                     phoneNumber: userCheck.phoneNumber,
+                    avatar: userCheck.avatar,
                     token: token
                 }
                 return userRes
@@ -85,7 +87,8 @@ class userService {
                 username: user.username,
                 fullName: user.fullName,
                 phoneNumber: user.phoneNumber,
-                role: user.role
+                role: user.role,
+                avatar: user.avatar
             }
             const token = jwt.sign(payload, SECRET, {
                 expiresIn: 3600000
@@ -96,6 +99,7 @@ class userService {
                 role: user.role,
                 fullName: user.fullName,
                 phoneNumber: user.phoneNumber,
+                avatar: user.avatar,
                 token: token
             }
             return userRes
@@ -123,9 +127,7 @@ class userService {
         await this.userRepository.update(
             {idUser}, {
                 username: User.username,
-                password: User.password,
                 avatar: User.avatar,
-                role: User.role,
                 fullName: User.fullName,
                 phoneNumber: User.phoneNumber
             });
