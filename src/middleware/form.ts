@@ -1,3 +1,4 @@
+// middleware/form-checkUser.ts
 export const checkRegister = (req, res, next) => {
   try {
     let data = req.body;
