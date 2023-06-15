@@ -25,6 +25,7 @@ class userService {
                     username: userCheck.username,
                     fullName: userCheck.fullName,
                     phoneNumber: userCheck.phoneNumber,
+                    avatar : user.avatar,
                     role: userCheck.role
                 }
                 const token = jwt.sign(payload, SECRET, {
@@ -36,6 +37,7 @@ class userService {
                     role: userCheck.role,
                     fullName: userCheck.fullName,
                     phoneNumber: userCheck.phoneNumber,
+                    avatar : user.avatar,
                     token: token
                 }
                 return userRes
@@ -83,6 +85,7 @@ class userService {
                 username: user.username,
                 fullName: user.fullName,
                 phoneNumber: user.phoneNumber,
+                avatar : user.avatar,
                 role: user.role
             }
             const token = jwt.sign(payload, SECRET, {
@@ -94,6 +97,7 @@ class userService {
                 role: user.role,
                 fullName: user.fullName,
                 phoneNumber: user.phoneNumber,
+                avatar : user.avatar,
                 token: token
             }
             return userRes
