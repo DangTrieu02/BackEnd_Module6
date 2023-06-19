@@ -2,7 +2,7 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Category} from "./category";
 import {User} from "./user";
-import { Image } from "./image";
+import {Image} from "./image";
 
 @Entity()
 export class Home {
@@ -22,11 +22,11 @@ export class Home {
     bedrooms: number;
     @Column({default: 0})
     bathrooms: number;
-    @ManyToOne (() => Category, (category) => category.home)
+    @ManyToOne(() => Category, (category) => category.home)
     @JoinColumn()
     category: Category
     @OneToMany(() => Image, (image) => image.home)
-    image: Image[];
+    images: Image[];
     @Column({default: 0})
     count: number;
     @ManyToOne(() => User, (user) => user.homes)

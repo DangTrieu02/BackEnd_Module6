@@ -6,9 +6,11 @@ import {Home} from "./home";
 export class Image {
     @PrimaryGeneratedColumn()
     idImage: number;
+
     @Column()
     image: string;
-    @ManyToOne(() => Home, (home) => home.image)
+
+    @ManyToOne(() => Home, (home) => home.images)
     @JoinColumn()
     home: Home
 }

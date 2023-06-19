@@ -3,15 +3,14 @@ import {adminAuth} from "../middleware/adminAuth";
 import {auth} from "../middleware/auth";
 import homeController from "../controller/homeController";
 
-
 export const homeRouter = Router();
 homeRouter.use(auth);
-homeRouter.get('/', homeController.findAll);
-homeRouter.post('/', homeController.addHome); // Admin authority
-homeRouter.delete('/:id', adminAuth, homeController.remove);
-homeRouter.get('/filter', homeController.findByNameProduct)
-homeRouter.get('/price', homeController.findByPrice)
+homeRouter.get("/", homeController.findAll);
+homeRouter.post("/", homeController.addHome); // Admin authority
+homeRouter.delete("/:id", homeController.removeHome);
+homeRouter.get("/filter", homeController.findByNameHome);
+homeRouter.get("/price", homeController.findByPrice);
 
-homeRouter.put('/:id', adminAuth, homeController.editProduct);
-homeRouter.get('/:id', homeController.findHomeById);
-homeRouter.get('/categories/:categoryId', homeController.findByCategoryId);
+homeRouter.put("/:id", homeController.editHome);
+homeRouter.get("/:id", homeController.findHomeById);
+homeRouter.get("/categories/:categoryId", homeController.findByCategoryId);

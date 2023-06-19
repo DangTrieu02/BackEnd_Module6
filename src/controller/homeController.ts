@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import homeService from "../services/homeService";
 
-class HomeController{
+class HomeController {
     constructor() {
     }
 
@@ -12,9 +12,9 @@ class HomeController{
 
     addHome = async (req: Request, res: Response) => {
         await homeService.addHome(req.body);
-        if (!req.body.name) {
+        if (!req.body.nameHome) {
             return res.status(400).json({
-                message: "name missing",
+                message: "nameHome missing",
             });
         }
         res.status(201).json({
@@ -22,7 +22,7 @@ class HomeController{
         });
     };
 
-    remove = async (req: Request, res: Response) => {
+    removeHome = async (req: Request, res: Response) => {
         const id = req.params.id;
         await homeService.removeHome(id);
         res.status(200).json({
@@ -42,7 +42,7 @@ class HomeController{
         res.status(200).json(products);
     };
 
-    editProduct = async (req: Request, res: Response) => {
+    editHome = async (req: Request, res: Response) => {
         const id = req.params.id;
         const product = req.body;
         await homeService.editHome(id, product);
@@ -51,10 +51,10 @@ class HomeController{
         });
     };
 
-    findByNameProduct = async (req: Request, res: Response) => {
+    findByNameHome = async (req: Request, res: Response) => {
         const name = req.query.search;
         try {
-            const response = await homeService.findByNameProduct(name);
+            const response = await homeService.findByNameHome(name);
             res.status(200).json(response);
         } catch (e) {
             res.status(500).json(e.message);
@@ -73,4 +73,4 @@ class HomeController{
     };
 }
 
-export default new HomeController
+export default new HomeController();

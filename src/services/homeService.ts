@@ -1,9 +1,8 @@
 import {AppDataSource} from "../dataSource";
 import {Home} from "../entity/home";
-import {Like} from "typeorm";
+import {Like, In} from "typeorm";
 
-
-class HomeService{
+class HomeService {
     private homeRepository;
 
     constructor() {
@@ -14,40 +13,45 @@ class HomeService{
         return await this.homeRepository.find({
             relations: {
                 category: true,
-            }
+                image: true, // Include image relation
+            },
         });
     }
 
     addHome = async (home) => {
-        await this.homeRepository.save(home)
+        await this.homeRepository.save(home);
     }
 
     removeHome = async (id) => {
-        return await this.homeRepository.delete(id)
+        return await this.homeRepository.delete(id);
     }
 
     findHomeById = async (id) => {
         return await this.homeRepository.findOne(id, {
-            relations: {category: true},
-        })
+            relations: {
+                category: true,
+                image: true, // Include image relation
+            },
+        });
     }
 
     findByCategoryId = async (categoryId) => {
         return await this.homeRepository.find({
             where: {
-                category: { idCategory: categoryId },
+                category: {idCategory: categoryId},
             },
-            relations: ["category"],
+            relations: ["category", "image"], // Include category and image relations
         });
     };
 
-    findByNameProduct = async (name) => {
+    findByNameHome = async (name) => {
         const products = await this.homeRepository.find({
             where: {
-                name: Like(`%${name}%`),
+                nameHome: Like(`%${name}%`),
             },
             relations: {
                 category: true,
+                image: true, // Include image relation
             },
         });
 
@@ -59,15 +63,17 @@ class HomeService{
     };
 
     findByPrice = async (min, max) => {
-        let query = this.homeRepository.createQueryBuilder('home');
+        let query = this.homeRepository.createQueryBuilder("home");
 
         if (min && max) {
-            query = query.where("home.price >= :min AND home.price <= :max", { min, max });
+            query = query.where("home.price >= :min AND home.price <= :max", {min, max});
         } else if (min) {
-            query = query.where("home.price >= :min", { min });
+            query = query.where("home.price >= :min", {min});
         } else if (max) {
-            query = query.where("home.price <= :max", { max });
+            query = query.where("home.price <= :max", {max});
         }
+
+        query = query.leftJoinAndSelect("home.image", "image"); // Include image relation
 
         const homes = await query.getMany();
 
@@ -83,4 +89,4 @@ class HomeService{
     };
 }
 
-export default new HomeService;
+export default new HomeService();
