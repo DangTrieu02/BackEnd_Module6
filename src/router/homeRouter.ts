@@ -1,10 +1,12 @@
+// home-router.ts
 import {Router} from "express";
 import {adminAuth} from "../middleware/adminAuth";
 import {auth} from "../middleware/auth";
 import homeController from "../controller/homeController";
+import {ownerAuth} from "../middleware/owner";
 
 export const homeRouter = Router();
-homeRouter.use(auth);
+// homeRouter.use(auth);
 homeRouter.get("/", homeController.findAll);
 homeRouter.post("/", homeController.addHome); // Admin authority
 homeRouter.delete("/:id", homeController.removeHome);

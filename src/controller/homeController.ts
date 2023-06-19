@@ -1,3 +1,4 @@
+// homeController.ts
 import {Request, Response} from "express";
 import homeService from "../services/homeService";
 
@@ -23,7 +24,7 @@ class HomeController {
     };
 
     removeHome = async (req: Request, res: Response) => {
-        const id = req.params.id;
+        const id = req.params.idHome;
         await homeService.removeHome(id);
         res.status(200).json({
             message: "Delete success",
@@ -31,7 +32,7 @@ class HomeController {
     };
 
     findHomeById = async (req: Request, res: Response) => {
-        const id = req.params.id;
+        const id = req.params.idHome;
         const product = await homeService.findHomeById(id);
         res.status(200).json(product);
     };
@@ -43,7 +44,7 @@ class HomeController {
     };
 
     editHome = async (req: Request, res: Response) => {
-        const id = req.params.id;
+        const id = req.params.idHome;
         const product = req.body;
         await homeService.editHome(id, product);
         res.status(200).json({
