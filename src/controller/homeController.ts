@@ -1,77 +1,65 @@
-// homeController.ts
 import {Request, Response} from "express";
-import homeService from "../services/homeService";
+import homeService from "../services/HomeService";
+import HomeService from "../services/HomeService";
+import categoryService from "../services/categoryService";
 
-class HomeController {
+class homeController {
+    private homeService;
+
     constructor() {
+        this.homeService = HomeService
+    }
+    getAllHome = async (req: Request, res: Response) => {
+        try {
+            let orders;
+            let data;
+            let homes = await homeService.getAll();
+            let categories = await categoryService.getAllCategory();
+            if (req["decoded"]) {
+                // orders = await orderService.getMyOrder(req["decoded"].idUser);
+                data = [homes, categories, orders];
+            } else {
+                data = [homes, categories];
+            }
+            return res.status(200).json(homes);
+        } catch (e) {
+            res.status(500).json(e.message);
+        }
+    };
+
+
+    findHomeByAddress = async (req: Request, res: Response) => {
+        try {
+            const address = req.query.address;
+            const homes = await this.homeService.findHomeByAddress(address);
+            return res.status(201).json({
+                homes: homes,
+                address: address
+            });
+        } catch (err) {
+            res.status(500).json(err.message);
+        }
+    }
+    findHomeForRent = async (req: Request, res: Response) => {
+        try {
+            const homes = await homeService.findHomeForRent();
+            return res.status(201).json({
+                homes: homes.homes
+            });
+        } catch (err) {
+            res.status(500).json(err.message);
+        }
+    }
+    findHomeForRented = async (req: Request, res: Response) => {
+        try {
+            const homes = await homeService.findHomeRented();
+            return res.status(201).json({
+                homes: homes.homes
+            });
+        } catch (err) {
+            res.status(500).json(err.message);
+        }
     }
 
-    findAll = async (req: Request, res: Response) => {
-        const listProduct = await homeService.getAllHome();
-        res.status(200).json(listProduct);
-    };
-
-    addHome = async (req: Request, res: Response) => {
-        await homeService.addHome(req.body);
-        if (!req.body.nameHome) {
-            return res.status(400).json({
-                message: "nameHome missing",
-            });
-        }
-        res.status(201).json({
-            message: "OK",
-        });
-    };
-
-    removeHome = async (req: Request, res: Response) => {
-        const id = req.params.idHome;
-        await homeService.removeHome(id);
-        res.status(200).json({
-            message: "Delete success",
-        });
-    };
-
-    findHomeById = async (req: Request, res: Response) => {
-        const id = req.params.idHome;
-        const product = await homeService.findHomeById(id);
-        res.status(200).json(product);
-    };
-
-    findByCategoryId = async (req: Request, res: Response) => {
-        const categoryId = req.params.categoryId;
-        const products = await homeService.findByCategoryId(categoryId);
-        res.status(200).json(products);
-    };
-
-    editHome = async (req: Request, res: Response) => {
-        const id = req.params.idHome;
-        const product = req.body;
-        await homeService.editHome(id, product);
-        res.status(200).json({
-            message: "Edit success",
-        });
-    };
-
-    findByNameHome = async (req: Request, res: Response) => {
-        const name = req.query.search;
-        try {
-            const response = await homeService.findByNameHome(name);
-            res.status(200).json(response);
-        } catch (e) {
-            res.status(500).json(e.message);
-        }
-    };
-
-    findByPrice = async (req: Request, res: Response) => {
-        try {
-            const min = req.query.min;
-            const max = req.query.max;
-            const response = await homeService.findByPrice(min, max);
-            res.status(200).json(response);
-        } catch (e) {
-            res.status(500).json(e.message);
-        }
-    };
 }
-
-export default new HomeController();
+export default new homeController();
