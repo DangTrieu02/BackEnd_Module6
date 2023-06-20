@@ -28,7 +28,6 @@ class UserController {
             if (userFind) {
                 res.status(200).json({ message: "User name already used" });
             } else {
-                user.avatar= 'https://th.bing.com/th/id/OIP.HVmOFUr9K0ChFw6YsH6m4gHaHa?pid=ImgDet&rs=1'
                 user.password = await bcrypt.hash(user.password, 10);
                 let newUser = await this.userService.register(user);
                 res
@@ -38,9 +37,11 @@ class UserController {
         } catch (err) {
             console.log(err);
         }
-      };
 <<<<<<<<< Temporary merge branch 1
+      };
 =========
+    };
+>>>>>>>>> Temporary merge branch 2
 
     changePassword = async (req: Request, res: Response) => {
         try {
@@ -66,10 +67,8 @@ class UserController {
         }
     };
 
-}
->>>>>>>>> Temporary merge branch 2
 
-    loginWithGG = async (req: Request, res: Response) => {        
+    loginWithGG = async (req: Request, res: Response) => {
         let user= {
             username : req.body.email,
             password : 0,

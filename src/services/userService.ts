@@ -37,7 +37,6 @@ class userService {
                     role: userCheck.role,
                     fullName: userCheck.fullName,
                     phoneNumber: userCheck.phoneNumber,
-                    avatar: userCheck.avatar,
                     token: token
                 }
                 return userRes
@@ -77,6 +76,11 @@ class userService {
         user.password = hashedPassword;
         await this.userRepository.save(user);
     };
+<<<<<<<<< Temporary merge branch 1:src/service/userService.ts
+=========
+
+
+>>>>>>>>> Temporary merge branch 2:src/services/userService.ts
 
     checkAcc= async (user) => {
         try {
@@ -117,6 +121,8 @@ class userService {
             return await this.checkAcc(user)
         }
     }
+<<<<<<<<< Temporary merge branch 1:src/service/userService.ts
+=========
     getMyProfile = async (idUser)=>{
         let user = await this.userRepository.findOneBy({idUser: idUser})
         return user
@@ -125,7 +131,9 @@ class userService {
         await this.userRepository.update(
             {idUser}, {
                 username: User.username,
+                password: User.password,
                 avatar: User.avatar,
+                role: User.role,
                 fullName: User.fullName,
                 phoneNumber: User.phoneNumber
             });
@@ -133,6 +141,7 @@ class userService {
 
 
 
+>>>>>>>>> Temporary merge branch 2:src/services/userService.ts
 }
 
 export default new userService()

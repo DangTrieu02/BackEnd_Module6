@@ -7,3 +7,6 @@ homeRouter.get('/find-by-address',homeController.findHomeByAddress);
 homeRouter.get('/for-rent',homeController.findHomeForRent);
 homeRouter.get('/rented',homeController.findHomeForRented);
 homeRouter.get("/listHome", homeController.getAllHome);
+homeRouter.get('/',homeController.getAllHome)
+homeRouter.post('/',homeController.createHome)
+homeRouter.put('/:id',homeController.updateHome)
