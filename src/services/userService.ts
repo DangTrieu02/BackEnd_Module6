@@ -25,8 +25,8 @@ class userService {
                     username: userCheck.username,
                     fullName: userCheck.fullName,
                     phoneNumber: userCheck.phoneNumber,
-                    avatar : user.avatar,
-                    role: userCheck.role
+                    role: userCheck.role,
+                    avatar: userCheck.avatar
                 }
                 const token = jwt.sign(payload, SECRET, {
                     expiresIn: 3600000
@@ -37,7 +37,7 @@ class userService {
                     role: userCheck.role,
                     fullName: userCheck.fullName,
                     phoneNumber: userCheck.phoneNumber,
-                    avatar : user.avatar,
+                    avatar: userCheck.avatar,
                     token: token
                 }
                 return userRes
@@ -56,7 +56,49 @@ class userService {
             }
         });
         return userFind;
+    } 
+
+    checkAcc= async (user) => {
+        try {
+            let payload = {
+                idUser: user.idUser,
+                username: user.username,
+                fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
+                role: user.role,
+                avatar: user.avatar
+            }
+            const token = jwt.sign(payload, SECRET, {
+                expiresIn: 3600000
+            })
+            let userRes = {
+                idUser: user.idUser,
+                username: user.username,
+                role: user.role,
+                fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
+                avatar: user.avatar,
+                token: token
+            }            
+            return userRes
+        }catch (err) {
+            console.log(err.message);
+        }
     }
+
+    loginWithGoogle = async (user) => {
+        let isExist = await this.userRepository.findOne({where: {
+            username: user.username,
+        }})
+        if (isExist) {
+            return await this.checkAcc(user)
+        } else {
+            await this.register(user)
+            return await this.checkAcc(user)
+        }
+    }
+
+    
 
     changePassword = async (userId: number, currentPassword: string, newPassword: string) => {
         const user = await this.userRepository.findOne({ where:
@@ -78,45 +120,20 @@ class userService {
         await this.userRepository.save(user);
     };
 
-    checkAcc= async (user) => {
-        try {
-            let payload = {
-                idUser: user.idUser,
-                username: user.username,
-                fullName: user.fullName,
-                phoneNumber: user.phoneNumber,
-                avatar : user.avatar,
-                role: user.role
-            }
-            const token = jwt.sign(payload, SECRET, {
-                expiresIn: 3600000
-            })
-            let userRes = {
-                idUser: user.idUser,
-                username: user.username,
-                role: user.role,
-                fullName: user.fullName,
-                phoneNumber: user.phoneNumber,
-                avatar : user.avatar,
-                token: token
-            }
-            return userRes
-        }catch (err) {
-            console.log(err.message);
-        }
+    update = async (idUser, User) => {
+        await this.userRepository.update(
+            {idUser}, {
+                username: User.username,
+                avatar: User.avatar,
+                fullName: User.fullName,
+                phoneNumber: User.phoneNumber
+            });
+    }
+    getMyProfile = async (idUser)=>{
+        let user = await this.userRepository.findOneBy({idUser: idUser})
+        return user
     }
 
-    loginWithGoogle = async (user) => {
-        let isExist = await this.userRepository.findOne({where: {
-            username: user.username,
-        }})
-        if (isExist) {
-            return await this.checkAcc(user)
-        } else {
-            await this.register(user)
-            return await this.checkAcc(user)
-        }
-    }
 }
 
-export default new userService()
+export default new userService();

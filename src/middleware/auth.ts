@@ -1,3 +1,4 @@
+// auth-middleware.ts
 export const SECRET = '123456';
 import jwt from 'jsonwebtoken';
 
