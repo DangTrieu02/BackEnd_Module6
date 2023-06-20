@@ -78,8 +78,6 @@ class userService {
         await this.userRepository.save(user);
     };
 
-
-
     checkAcc= async (user) => {
         try {
             let payload = {

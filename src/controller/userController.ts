@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import userService from "../services/userService";
 import bcrypt from "bcrypt";
+import userService from "../services/userService";
 class UserController {
     private userService;
 
@@ -37,7 +38,9 @@ class UserController {
         } catch (err) {
             console.log(err);
         }
-    };
+      };
+<<<<<<<<< Temporary merge branch 1
+=========
 
     changePassword = async (req: Request, res: Response) => {
         try {
@@ -63,8 +66,10 @@ class UserController {
         }
     };
 
+}
+>>>>>>>>> Temporary merge branch 2
 
-    loginWithGG = async (req: Request, res: Response) => {
+    loginWithGG = async (req: Request, res: Response) => {        
         let user= {
             username : req.body.email,
             password : 0,
