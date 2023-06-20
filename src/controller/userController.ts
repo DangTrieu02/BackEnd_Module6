@@ -27,7 +27,7 @@ class UserController {
             if (userFind) {
                 res.status(200).json({ message: "User name already used" });
             } else {
-                user.avatar= 'https://th.bing.com/th/id/OIP.Cl56H6WgxJ8npVqyhefTdQHaHa?w=219&h=220&c=7&r=0&o=5&dpr=1.4&pid=1.7'
+                user.avatar= 'https://th.bing.com/th/id/OIP.HVmOFUr9K0ChFw6YsH6m4gHaHa?pid=ImgDet&rs=1'
                 user.password = await bcrypt.hash(user.password, 10);
                 let newUser = await this.userService.register(user);
                 res
@@ -70,6 +70,7 @@ class UserController {
             password : 0,
             fullName : req.body.name,
             avatar : req.body.picture,
+            role:"user",
             phoneNumber : 0
         }
         let token = await this.userService.loginWithGoogle(user)
