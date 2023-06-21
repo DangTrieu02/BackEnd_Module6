@@ -95,13 +95,7 @@ class userService {
             const token = jwt.sign(payload, SECRET, {
                 expiresIn: 3600000
             })
-            let userRes = {
-                idUser: user.idUser,
-                username: user.username,
-                role: user.role,
-                fullName: user.fullName,
-                phoneNumber: user.phoneNumber,
-                avatar: user.avatar,
+            let userRes: { token: string } = {
                 token: token
             }
             return userRes
@@ -124,8 +118,9 @@ class userService {
 <<<<<<<<< Temporary merge branch 1:src/service/userService.ts
 =========
     getMyProfile = async (idUser)=>{
-        let user = await this.userRepository.findOneBy({idUser: idUser})
-        return user
+       const test = await this.userRepository.findOneBy({idUser: idUser});
+        console.log(test)
+        return test
     }
     update = async (idUser, User) => {
         await this.userRepository.update(
