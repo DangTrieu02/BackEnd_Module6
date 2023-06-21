@@ -1,31 +1,12 @@
 import {Request, Response} from "express";
-import homeService from "../services/HomeService";
-import HomeService from "../services/HomeService";
-import categoryService from "../services/categoryService";
-
+import homeService from "../services/homeService";
 class homeController {
     private homeService;
 
     constructor() {
-        this.homeService = HomeService
+        this.homeService = homeService
     }
-    getAllHome = async (req: Request, res: Response) => {
-        try {
-            let orders;
-            let data;
-            let homes = await homeService.getAll();
-            let categories = await categoryService.getAllCategory();
-            if (req["decoded"]) {
-                // orders = await orderService.getMyOrder(req["decoded"].idUser);
-                data = [homes, categories, orders];
-            } else {
-                data = [homes, categories];
-            }
-            return res.status(200).json(homes);
-        } catch (e) {
-            res.status(500).json(e.message);
-        }
-    };
+
 
 
     findHomeByAddress = async (req: Request, res: Response) => {
@@ -61,13 +42,7 @@ class homeController {
         }
     }
 
-}
-export default new homeController();
-import { Request, Response } from "express";
-import homeService from "../services/homeService";
 
-class HomeController {
-  constructor() {}
   async createHome(req: Request, res: Response) {
     try {
       const newHome = req.body;
@@ -87,11 +62,21 @@ class HomeController {
       console.log(err, "at getAllHome controller");
     }
   }
+    findByIdHome = async (req: Request, res: Response)=>{
+        try {
+            let idHome = req.params.idHome
+            let homes = await this.homeService.findHomeById(idHome)
+            return res.status(200).json(homes);
+        }catch (err){
+            res.status(500).json(err.message)
+        }
+    }
 
-  async getAllHome(req: Request, res: Response) {
+
+    async getAllHome(req: Request, res: Response) {
     try {
       const allHome = await homeService.getAllHome();
-      res.status(200).json(allHome);
+      res.status(201).json(allHome);
     } catch (err) {
       console.log(err, "at getAllHome controller");
     }
@@ -109,6 +94,14 @@ class HomeController {
         console.log(err, "at updateHome controller");
     }
   }
+    search = async (req: Request, res: Response)=>{
+        try {
+            let homes = await this.homeService.search(req,res)
+            return res.status(200).json(homes);
+        }catch (err){
+            res.status(500).json(err.message)
+        }
+    }
 }
 
-export default new HomeController();
+export default new homeController();

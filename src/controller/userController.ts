@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import userService from "../services/userService";
 import bcrypt from "bcrypt";
+import userService from "../services/userService";
 import jwt from "jsonwebtoken";
 class UserController {
     private userService;
@@ -26,20 +26,19 @@ class UserController {
             let user = req.body;
             let userFind = await this.userService.findOne(req.body.username);
             if (userFind) {
-                res.status(200).json({ message: "User name already used" });
+                res.status(200).json({message: "User name already used"});
             } else {
-                user.avatar= 'https://th.bing.com/th/id/OIP.HVmOFUr9K0ChFw6YsH6m4gHaHa?pid=ImgDet&rs=1'
                 user.password = await bcrypt.hash(user.password, 10);
                 let newUser = await this.userService.register(user);
                 res
                     .status(201)
-                    .json({ newUser: newUser, message: "Register successfully" });
+                    .json({newUser: newUser, message: "Register successfully"});
             }
         } catch (err) {
             console.log(err);
         }
-    };
 
+    }
     changePassword = async (req: Request, res: Response) => {
         try {
             const { currentPassword, newPassword, confirmNewPassword } = req.body;

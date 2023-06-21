@@ -76,11 +76,6 @@ class userService {
         user.password = hashedPassword;
         await this.userRepository.save(user);
     };
-<<<<<<<<< Temporary merge branch 1:src/service/userService.ts
-=========
-
-
->>>>>>>>> Temporary merge branch 2:src/services/userService.ts
 
     checkAcc= async (user) => {
         try {
@@ -115,8 +110,7 @@ class userService {
             return await this.checkAcc(user)
         }
     }
-<<<<<<<<< Temporary merge branch 1:src/service/userService.ts
-=========
+
     getMyProfile = async (idUser)=>{
        const test = await this.userRepository.findOneBy({idUser: idUser});
         console.log(test)
@@ -133,10 +127,6 @@ class userService {
                 phoneNumber: User.phoneNumber
             });
     }
-
-
-
->>>>>>>>> Temporary merge branch 2:src/services/userService.ts
 }
 
 export default new userService()
