@@ -32,6 +32,6 @@ export class Home {
     @ManyToOne(() => User, (user) => user.homes)
     @JoinColumn()
     user: User
-    @Column()
+    @Column({default: "rent"})
     status: string;
 }
