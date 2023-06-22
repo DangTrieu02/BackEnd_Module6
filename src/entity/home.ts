@@ -1,8 +1,9 @@
 // home-entity.ts
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Category } from "./category";
-import { User } from "./user";
-import { Image } from "./image";
+
+import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Category} from "./category";
+import {User} from "./user";
+import {Image} from "./image";
 
 @Entity()
 export class Home {
@@ -21,29 +22,29 @@ export class Home {
     @Column()
     price: number;
 
-    @Column({ default: 0 })
+    @Column({default: 0})
     floorArea: number;
 
-    @Column({ default: 0 })
+    @Column({default: 0})
     bedrooms: number;
 
-    @Column({ default: 0 })
+    @Column({default: 0})
     bathrooms: number;
 
     @ManyToOne(() => Category, (category) => category.home)
-    @JoinColumn({ name: "categoryId" }) // Set the join column name explicitly
     category: Category;
 
-    @OneToMany(() => Image, (image) => image.home)
-    image: Image[];
+    @OneToMany(() => Image, (image) => image.home, {cascade: true})
+    image: Image[]; // Renamed the field to "image"
 
-    @Column({ default: 0 })
+    @Column({default: 0})
     count: number;
 
     @ManyToOne(() => User, (user) => user.home)
-    @JoinColumn({ name: "userId" }) // Set the join column name explicitly
+    @JoinColumn({name: "userId"})
     user: User;
 
-    @Column()
-    status: string;
+    @Column({ default: "available" })
+    status: string; // Possible values: "available", "hiring", "unavailable"
+
 }

@@ -1,6 +1,6 @@
 // category-entity.ts
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Home } from "./home";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Home} from "./home";
 
 @Entity()
 export class Category {
@@ -13,11 +13,4 @@ export class Category {
     @OneToMany(() => Home, (home) => home.category)
     home: Home[];
 
-    getIdCategory(): string {
-        return this.idCategory;
-    }
-
-    setIdCategory(idCategory: string): void {
-        this.idCategory = idCategory;
-    }
 }
