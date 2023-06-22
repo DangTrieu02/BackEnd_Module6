@@ -12,11 +12,12 @@ class HomeService {
     try {
       let home = await this.homeRepository.save(newHome);
       await imageService.createImage(home.idHome, newHome.Image);
-      let homeRes= await this.homeRepository.findOneBy({ 
+      let homeRes = await this.homeRepository.findOne({
         where: { idHome: home.idHome },
         relations: {
           image: true,
-        },})
+        },
+      });
       return homeRes;
     } catch (e) {
       console.log(e, "at createHome");
@@ -60,7 +61,13 @@ class HomeService {
     try {
       let home = await this.homeRepository.findOneBy({ idHome: id });
       home = { ...home, ...newHome };
-      return await this.homeRepository.save(home);
+      let resHome= await this.homeRepository.save(home);
+      return  await this.homeRepository.find({
+        where: { idHome: resHome.idHome},
+        relations: {
+          image: true,
+        },
+      });
     } catch (e) {
       console.log(e);
     }

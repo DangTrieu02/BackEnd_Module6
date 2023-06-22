@@ -91,10 +91,10 @@ class userService {
             username: user.username,
         }})
         if (isExist) {
-            return await this.checkAcc(user)
+            return await this.checkAcc(isExist)
         } else {
             await this.register(user)
-            return await this.checkAcc(user)
+            return await this.checkAcc(isExist)
         }
     }
 

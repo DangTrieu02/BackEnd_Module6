@@ -9,7 +9,6 @@ class ImageService {
   }
     async createImage(home,image){
         const newImage ={home:home,image:image}
-        console.log(newImage);
         await this.imageRepository.save(newImage);
     }
 }
