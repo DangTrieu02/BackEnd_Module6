@@ -49,9 +49,17 @@ class HomeService {
     }
   }
 
-  async getHome(userId) {
+  async getHome(idHome) {
     try {
-      return await this.homeRepository.find();
+      return await this.homeRepository.findOne({
+        relations: {
+          image: true,
+          user : true
+        },
+        where: {
+              idHome: `${idHome}`,
+      },
+      });
     } catch (e) {
       console.log(e, "at getHomeByUser ");
     }
