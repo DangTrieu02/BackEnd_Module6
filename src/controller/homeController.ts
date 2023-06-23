@@ -1,18 +1,32 @@
-import { Request, Response } from "express";
-import { UploadedFile } from "express-fileupload";
-import homeService from "../services/homeService";
+import {Request, Response} from "express";
+import homeService from "../services/HomeService";
+import HomeService from "../services/HomeService";
+import categoryService from "../services/categoryService";
 
-class HomeController {
-    private homeService = homeService;
+class homeController {
+    private homeService;
 
-    findAll = async (req: Request, res: Response) => {
+    constructor() {
+        this.homeService = HomeService
+    }
+    getAllHome = async (req: Request, res: Response) => {
         try {
-            const listProduct = await this.homeService.getAllHome();
-            res.status(200).json(listProduct);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
+            let orders;
+            let data;
+            let homes = await homeService.getAll();
+            let categories = await categoryService.getAllCategory();
+            if (req["decoded"]) {
+                // orders = await orderService.getMyOrder(req["decoded"].idUser);
+                data = [homes, categories, orders];
+            } else {
+                data = [homes, categories];
+            }
+            return res.status(200).json(homes);
+        } catch (e) {
+            res.status(500).json(e.message);
         }
     };
+
 
     findHomeByAddress = async (req: Request, res: Response) => {
         try {
