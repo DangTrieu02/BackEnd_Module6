@@ -1,22 +1,21 @@
 import {Request, Response} from "express";
-import homeService from "../services/HomeService";
-import HomeService from "../services/HomeService";
+import homeService from "../services/homeService";
 import categoryService from "../services/categoryService";
+import {UploadedFile} from "express-fileupload";
 
 class homeController {
     private homeService;
 
     constructor() {
-        this.homeService = HomeService
+        this.homeService = homeService
     }
     getAllHome = async (req: Request, res: Response) => {
         try {
             let orders;
             let data;
-            let homes = await homeService.getAll();
+            let homes = await homeService.getAllHome();
             let categories = await categoryService.getAllCategory();
             if (req["decoded"]) {
-                // orders = await orderService.getMyOrder(req["decoded"].idUser);
                 data = [homes, categories, orders];
             } else {
                 data = [homes, categories];
@@ -195,4 +194,4 @@ class homeController {
     };
 }
 
-export default new HomeController();
+export default new homeController();

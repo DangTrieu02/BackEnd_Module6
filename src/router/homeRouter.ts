@@ -7,7 +7,7 @@ import {ownerAuth} from "../middleware/owner";
 
 export const homeRouter = Router();
 
-homeRouter.get("/", homeController.findAll);
+homeRouter.get("/", homeController.getAllHome);
 homeRouter.get("/find-by-address", homeController.findHomeByAddress);
 homeRouter.get("/for-rent", homeController.findHomeForRent);
 homeRouter.get("/rented", homeController.findHomeRented);
