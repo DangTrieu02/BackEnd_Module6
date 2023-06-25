@@ -1,3 +1,4 @@
+// homeController.ts
 import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import homeService from "../services/homeService";

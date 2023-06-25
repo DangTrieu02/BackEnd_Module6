@@ -3,7 +3,7 @@ import {Request, Response} from "express";
 import categoryService from "../services/categoryService";
 
 class CategoryController {
-    getAllCategories = async (_: Request, res: Response) => {
+    getAllCategories = async (req: Request, res: Response) => {
         const categories = await categoryService.getAllCategory();
         res.json(categories);
     };

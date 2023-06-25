@@ -1,3 +1,4 @@
+// homeService.ts
 import { AppDataSource } from "../dataSource";
 import { Home } from "../entity/home";
 import { Like } from "typeorm";
