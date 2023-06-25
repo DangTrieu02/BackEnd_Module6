@@ -6,171 +6,168 @@ import { UploadedFile } from "express-fileupload";
 import { Image } from "../entity/image";
 
 class HomeService {
-    private homeRepository;
+  private homeRepository;
 
-    constructor() {
-        this.homeRepository = AppDataSource.getRepository(Home);
+  constructor() {
+    this.homeRepository = AppDataSource.getRepository(Home);
+  }
+
+  getAllHome = async () => {
+    return await this.homeRepository.find({
+      relations: {
+        category: true,
+        image: true,
+      },
+    });
+  };
+
+  addHome = async (home) => {
+    await this.homeRepository.save(home);
+  };
+
+  removeHome = async (id) => {
+    return await this.homeRepository.delete({ idHome: id });
+  };
+
+  findHomeById = async (id) => {
+    return await this.homeRepository.findOne(id, {
+      relations: {
+        category: true,
+        image: true,
+      },
+    });
+  };
+
+  findByCategoryId = async (categoryId) => {
+    return await this.homeRepository.find({
+      where: {
+        category: { idCategory: categoryId },
+      },
+      relations: {
+        category: true,
+        image: true,
+      },
+    });
+  };
+
+  findHomeByAddress = async (value) => {
+    const homes = await this.homeRepository
+      .createQueryBuilder("home")
+      .innerJoin("home.category", "category")
+      .where("home.address LIKE :value", { value: `%${value}%` })
+      .getMany();
+
+    return { homes };
+  };
+
+  findHomeForRent = async () => {
+    const homes = await this.homeRepository
+      .createQueryBuilder("home")
+      .innerJoin("home.category", "category")
+      .where("home.status = :status", { status: "For rent" })
+      .getMany();
+
+    return { homes };
+  };
+
+  findHomeRented = async () => {
+    const homes = await this.homeRepository
+      .createQueryBuilder("home")
+      .innerJoin("home.category", "category")
+      .where("home.status = :status", { status: "Rented" })
+      .getMany();
+
+    return { homes };
+  };
+
+  findByNameHome = async (nameHome) => {
+    const homes = await this.homeRepository.find({
+      where: {
+        nameHome: Like(`%${nameHome}%`),
+      },
+      relations: ["category", "image"],
+    });
+
+    return homes;
+  };
+
+  findByPrice = async (min, max) => {
+    const query = this.homeRepository
+      .createQueryBuilder("home")
+      .leftJoinAndSelect("home.image", "image")
+      .where("home.price >= :min", { min })
+      .andWhere("home.price <= :max", { max });
+
+    const homes = await query.getMany();
+
+    if (homes.length === 0) {
+      throw new Error("Can not find by price");
     }
 
-    getAllHome = async () => {
-        return await this.homeRepository.find({
-            relations: {
-                category: true,
-                image: true,
-            },
-        });
-    };
+    return homes;
+  };
 
-    addHome = async (home) => {
-        await this.homeRepository.save(home);
-    };
+  editHome = async (id, product) => {
+    return await this.homeRepository.update(id, product);
+  };
 
-    removeHome = async (id) => {
-        return await this.homeRepository.delete({ idHome: id });
-    };
+  uploadImage = async (homeId: number, file: UploadedFile): Promise<string> => {
+    const home = await this.homeRepository.findOne(homeId, {
+      relations: ["image"],
+    });
 
-    findHomeById = async (id) => {
-        return await this.homeRepository.findOne(id, {
-            relations: {
-                category: true,
-                image: true,
-            },
-        });
-    };
+    if (!home) {
+      throw new Error("Home not found");
+    }
 
-    findByCategoryId = async (categoryId) => {
-        return await this.homeRepository.find({
-            where: {
-                category: { idCategory: categoryId },
-            },
-            relations: {
-                category: true,
-                image: true,
-            },
-        });
-    };
+    const image = new Image();
+    image.image = file.data.toString("base64");
+    image.home = home;
 
-    findHomeByAddress = async (value) => {
-        const homes = await this.homeRepository
-            .createQueryBuilder("home")
-            .innerJoin("home.category", "category")
-            .where("home.address LIKE :value", { value: `%${value}%` })
-            .getMany();
+    home.image = image;
 
-        return { homes };
-    };
+    await this.homeRepository.save(home);
 
-    findHomeForRent = async () => {
-        const homes = await this.homeRepository
-            .createQueryBuilder("home")
-            .innerJoin("home.category", "category")
-            .where("home.status = :status", { status: "For rent" })
-            .getMany();
+    return image.image;
+  };
 
-        return { homes };
-    };
+  changeHomeStatus = async (id: number) => {
+    const home = await this.homeRepository.findOne(id);
 
-    findHomeRented = async () => {
-        const homes = await this.homeRepository
-            .createQueryBuilder("home")
-            .innerJoin("home.category", "category")
-            .where("home.status = :status", { status: "Rented" })
-            .getMany();
+    if (!home) {
+      throw new Error("Home not found");
+    }
 
-        return { homes };
-    };
+    let newStatus: string;
 
-    findByNameHome = async (name) => {
-        const homes = await this.homeRepository.find({
-            where: {
-                nameHome: Like(`%${name}%`),
-            },
-            relations: ["category", "image"],
-        });
+    switch (home.status) {
+      case "available":
+        newStatus = "hiring";
+        break;
+      case "hiring":
+        newStatus = "unavailable";
+        break;
+      case "unavailable":
+        newStatus = "available";
+        break;
+      default:
+        newStatus = "available";
+        break;
+    }
 
-        if (homes.length === 0) {
-            throw new Error("Cannot find homes by name");
-        }
+    home.status = newStatus;
+    await this.homeRepository.save(home);
 
-        return homes;
-    };
+    return newStatus;
+  };
 
-    findByPrice = async (min, max) => {
-        const query = this.homeRepository
-            .createQueryBuilder("home")
-            .leftJoinAndSelect("home.image", "image")
-            .where("home.price >= :min", { min })
-            .andWhere("home.price <= :max", { max });
-
-        const homes = await query.getMany();
-
-        if (homes.length === 0) {
-            throw new Error("Can not find by price");
-        }
-
-        return homes;
-    };
-
-    editHome = async (id, product) => {
-        return await this.homeRepository.update(id, product);
-    };
-
-    uploadImage = async (homeId: number, file: UploadedFile): Promise<string> => {
-        const home = await this.homeRepository.findOne(homeId, {
-            relations: ["image"],
-        });
-
-        if (!home) {
-            throw new Error("Home not found");
-        }
-
-        const image = new Image();
-        image.image = file.data.toString("base64");
-        image.home = home;
-
-        home.image = image;
-
-        await this.homeRepository.save(home);
-
-        return image.image;
-    };
-
-    changeHomeStatus = async (id: number) => {
-        const home = await this.homeRepository.findOne(id);
-
-        if (!home) {
-            throw new Error("Home not found");
-        }
-
-        let newStatus: string;
-
-        switch (home.status) {
-            case "available":
-                newStatus = "hiring";
-                break;
-            case "hiring":
-                newStatus = "unavailable";
-                break;
-            case "unavailable":
-                newStatus = "available";
-                break;
-            default:
-                newStatus = "available";
-                break;
-        }
-
-        home.status = newStatus;
-        await this.homeRepository.save(home);
-
-        return newStatus;
-    };
-
-    findByStatus = async (status: string) => {
-        return await this.homeRepository.find({
-            where: { status },
-            relations: ["category", "image"],
-        });
-    };
+  findByStatus = async (status: string) => {
+    console.log(status);
+    return await this.homeRepository.find({
+      where: { status },
+      relations: ["category", "image"],
+    });
+  };
 }
 
 export default new HomeService();

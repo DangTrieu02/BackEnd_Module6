@@ -1,13 +1,14 @@
 // homeRouter.ts
-import {Router} from "express";
-import {adminAuth} from "../middleware/adminAuth";
-import {auth} from "../middleware/auth";
+import { Router } from "express";
+import { adminAuth } from "../middleware/adminAuth";
+import { auth } from "../middleware/auth";
 import homeController from "../controller/homeController";
-import {ownerAuth} from "../middleware/owner";
+import { ownerAuth } from "../middleware/owner";
 
 export const homeRouter = Router();
 
 homeRouter.get("/", homeController.findAll);
+homeRouter.get("/status", homeController.findByStatus);
 homeRouter.get("/find-by-address", homeController.findHomeByAddress);
 homeRouter.get("/for-rent", homeController.findHomeForRent);
 homeRouter.get("/rented", homeController.findHomeRented);
@@ -19,5 +20,8 @@ homeRouter.put("/:idHome", adminAuth, homeController.editHome);
 homeRouter.get("/:idHome", homeController.findHomeById);
 homeRouter.get("/categories/:categoryId", homeController.findByCategoryId);
 homeRouter.post("/upload-image/:idHome", adminAuth, homeController.uploadImage);
-homeRouter.put("/change-status/:idHome", adminAuth, homeController.changeHomeStatus);
-homeRouter.get("/status", homeController.findByStatus);
+homeRouter.put(
+  "/change-status/:idHome",
+  adminAuth,
+  homeController.changeHomeStatus
+);
