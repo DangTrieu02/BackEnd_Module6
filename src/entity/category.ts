@@ -10,4 +10,6 @@ export class Category {
     nameCategory: string
     @OneToMany ( () => Home, (home) => home.category)
     home: Home[]
+    @Column({type: 'text'})
+    icon: string;
 }

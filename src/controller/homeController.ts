@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import homeService from "../services/homeService";
+import categoryService from "../services/categoryService";
 
 class HomeController {
   constructor() {}
   async createHome(req: Request, res: Response) {
-    try {
+    try {      
       const newHome = req.body;
       await homeService.createHome(newHome);
       res.status(200).json(newHome);
@@ -48,10 +49,19 @@ class HomeController {
   async getHomeDetail(req: Request, res: Response) {
     try {
       const id = req.params.id;
-      let detail = await homeService.getHome(id)
-      res.status(200).json(detail)
+      let detail = await homeService.getHome(id);
+      res.status(200).json(detail);
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  async getAllCategory(req: Request, res: Response) {
+    try {
+      let allCate= await categoryService.getAll()
+      res.status(200).json(allCate);
+    } catch (e) {
+      console.log(e);
     }
   }
 }
