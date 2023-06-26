@@ -27,6 +27,7 @@ class HomeService {
   async getAllHome() {
     try {
       return await this.homeRepository.find({
+        where: { status: 'for-rent' },
         relations: {
           image: true,
         },
