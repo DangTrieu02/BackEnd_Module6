@@ -14,4 +14,4 @@ class ImageService {
     }
 }
 
-export default new ImageService()
+export default new ImageService();
