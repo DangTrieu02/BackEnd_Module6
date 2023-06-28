@@ -11,8 +11,10 @@ class CategoryService {
     }
 
     getAllCategory = async () => {
-        return await this.categoryRepository.find();
-    };
+        let categories = await this.categoryRepository.find();
+        return categories
+
+    }
 
     getCategoryById = async (id: string) => {
         return await this.categoryRepository.findOne({

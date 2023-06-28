@@ -1,19 +1,28 @@
 import { Request, Response } from "express";
 import homeService from "../services/homeService";
 import {UploadedFile} from "express-fileupload";
+import categoryService from "../services/categoryService";
 
 
 class HomeController {
     constructor() {}
-    async createHome(req: Request, res: Response) {
+    createHome = async (req: Request, res: Response) => {
         try {
-            const newHome = req.body;
-            await homeService.createHome(newHome);
-            res.status(200).json(newHome);
-        } catch (err) {
-            console.log(err, "at createHome controller");
+            console.log(req.body,1111)
+            let homes = await homeService.createHome(req.body);
+            return res.status(200).json(homes);
+        } catch (e) {
+            res.status(500).json(e.message);
         }
-    }
+    };
+    findCategory = async (req: Request, res: Response) => {
+        try {
+            let categories = await categoryService.getAllCategory();
+            return res.status(200).json(categories);
+        } catch (e) {
+            res.status(500).json(e.message);
+        }
+    };
 
 
     async getHomeByUserId(req: Request, res: Response) {

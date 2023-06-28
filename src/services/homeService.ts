@@ -13,12 +13,16 @@ class HomeService {
   async createHome(newHome) {
     try {
       let home = await this.homeRepository.save(newHome);
-      await imageService.createImage(home.idHome, newHome.Image);
-      let homeRes= await this.homeRepository.findOneBy({ 
+      for (let i = 0; i < newHome.image.length; i++) {
+        await imageService.createImage(home.idHome, newHome.image[i]);
+      }
+      let homeRes = await this.homeRepository.findOne({
         where: { idHome: home.idHome },
         relations: {
           image: true,
-        },})
+        },
+      });
+      console.log("service", homeRes)
       return homeRes;
     } catch (e) {
       console.log(e, "at createHome");
