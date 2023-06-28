@@ -50,14 +50,6 @@ class HomeService {
     }
   }
 
-  async getHome(userId) {
-    try {
-      return await this.homeRepository.find();
-    } catch (e) {
-      console.log(e, "at getHomeByUser ");
-    }
-  }
-
   async updateHome(id, newHome) {
     try {
       let home = await this.homeRepository.findOneBy({ idHome: id });

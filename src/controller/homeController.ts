@@ -41,8 +41,6 @@ class HomeController {
         try {
             const idHome = req.params.id;
             const newHome = req.body;
-            console.log(newHome, "at update");
-
             const home = await homeService.updateHome(idHome,newHome);
             res.status(200).json(home);
         } catch (err) {
