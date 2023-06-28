@@ -8,9 +8,9 @@ export class OrderDetail {
     @PrimaryGeneratedColumn()
     idOrderDetail: number;
     @Column()
-    checkIn: string;
+    checkIn: Date;
     @Column()
-    checkOut: string;
+    checkOut: Date;
     @Column()
     statusOrder: string;
     @ManyToOne(() => Order,(order) => order.idOrder)

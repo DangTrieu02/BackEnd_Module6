@@ -5,9 +5,12 @@ import {Home} from "./home";
 @Entity()
 export class Category {
     @PrimaryGeneratedColumn()
-    idCategory: number;
+    idCategory: string; // Update the type to string
+
     @Column()
-    nameCategory: string
-    @OneToMany ( () => Home, (home) => home.category)
-    home: Home[]
+    nameCategory: string;
+
+    @OneToMany(() => Home, (home) => home.category)
+    home: Home[];
+
 }
