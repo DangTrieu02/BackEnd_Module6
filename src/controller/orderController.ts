@@ -11,17 +11,9 @@ class OrderController {
   constructor() {
     this.orderService = orderService;
   }
-  create = async (req:Request,res:Response) => {
-    try{
-        const newOrder = req.body;
-        const userId = await getToken(req,res);
-        const order = await orderService.create(userId)
-         
-        return order 
-    }catch(err){
-        console.log(err);
+    create(body){
+        return this.orderService.create(body);
     }
-  };
 }
 
 export default new OrderController();
