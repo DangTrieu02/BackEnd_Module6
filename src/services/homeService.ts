@@ -74,10 +74,12 @@ class HomeService {
 
 
   findHomeById = async (id) => {
-    return await this.homeRepository.findOne(id, {
+    return await this.homeRepository.findOne({
+      where: {idHome: id},
       relations: {
         category: true,
         image: true,
+        user: true
       },
     });
   };
