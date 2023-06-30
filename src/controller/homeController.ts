@@ -57,7 +57,8 @@ class HomeController {
         } catch (err) {
             console.log(err, "at updateHome controller");
         }
-    }    findAll = async (req: Request, res: Response) => {
+    }
+    findAll = async (req: Request, res: Response) => {
         try {
             const listProduct = await homeService.getAllHome();
             res.status(200).json(listProduct);
