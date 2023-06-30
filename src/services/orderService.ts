@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import {AppDataSource} from "../dataSource";
-import {Order} from "./../entity/order";
+import {Order} from "../entity/order";
 
 class OrderService {
     private orderRepository;
