@@ -72,7 +72,6 @@ class HomeService {
     }
   }
 
-
   findHomeById = async (id) => {
     return await this.homeRepository.findOne(id, {
       relations: {
