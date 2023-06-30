@@ -1,4 +1,4 @@
-import {Router } from "express";
+import {Router} from "express";
 import OrderController from "../controller/orderController";
 
 export const orderRouter = Router()
