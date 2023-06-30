@@ -9,9 +9,9 @@ export class Order {
     id: number;
     @ManyToOne(() => User, (user) => user.orders)
     user: User;
-    @Column()
+    @Column({ type: 'date', nullable: false })
     checkIn: Date;
-    @Column()
+    @Column({ type: 'date', nullable: false })
     checkOut: Date;
     @Column({ default: "waiting" })
     status: string;

@@ -1,3 +1,4 @@
+// home-router.ts
 import {Router} from 'express'
 import homeController from '../controller/homeController';
 import {adminAuth} from "../middleware/adminAuth";
