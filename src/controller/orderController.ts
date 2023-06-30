@@ -1,18 +1,22 @@
 import jwtDecode from "jwt-decode";
-import orderService from "../services/orderService";
 import { Request, Response } from "express";
+import orderService from "../services/orderService";
 
 export const getToken = async (req:Request, res:Response) =>{
     const decodedToken = await jwtDecode(req.headers.authorization);
     return decodedToken["idUser"]
 }
 class OrderController {
-  private orderService;
-  constructor() {
-    this.orderService = orderService;
-  }
-    create(body){
-        return this.orderService.create(body);
+  constructor() {}
+    create = async (req: Request, res: Response) => {
+        try{
+            let userID = await getToken(req, res)
+            let homeID = req.params.idHome
+            let order = await orderService.create(req, userID, homeID);
+            return res.status(200).json(order)
+        }catch (err){
+            return err
+        }
     }
 }
 

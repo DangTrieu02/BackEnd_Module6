@@ -5,4 +5,4 @@ import {userRouter} from "./userRouter";
 userRouter.use(auth)
 
 export const orderRouter = Router()
-orderRouter.post('/*',auth, OrderController.create)
+orderRouter.post('/*/:idHome',auth, OrderController.create)
