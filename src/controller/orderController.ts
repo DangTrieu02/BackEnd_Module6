@@ -25,6 +25,36 @@ class OrderController {
       console.log(err);
     }
   };
+
+  getAll = async (req: Request, res: Response) => {
+    try {
+      const userId = await getToken(req, res);
+      let orders = await orderService.getForOwner(userId);
+      res.status(200).json(orders)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  access= async (req: Request, res: Response) => {
+    try {
+      const idOrder= req.params.id
+      await orderService.access(idOrder)
+      res.status(200).json({message:'access successful'});
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+  refuse = async (req: Request, res: Response) => {
+    try{
+      const idOrder = req.params.id
+      await orderService.refuse(idOrder)
+      res.status(200).json({message:'refuse successful'})
+    }catch(err){
+      console.log(err);
+    }
+  }
 }
 
 export default new OrderController();
