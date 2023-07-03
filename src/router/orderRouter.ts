@@ -1,9 +1,11 @@
-// order-router.ts
-import {Router } from "express";
+// orderRouter.ts
+import { Router } from "express";
 import OrderController from "../controller/orderController";
-import {auth} from "../middleware/auth";
-import {userRouter} from "./userRouter";
-userRouter.use(auth)
 
-export const orderRouter = Router()
-orderRouter.post('/*/:idHome',auth, OrderController.create)
+export const orderRouter = Router();
+orderRouter.post("/:id", OrderController.create);
+orderRouter.get("/", OrderController.getAll);
+orderRouter.put("/:id", OrderController.access);
+orderRouter.delete("/:id", OrderController.refuse);
+orderRouter.put("/checkOut/:id", OrderController.checkOut);
+orderRouter.get("/booking-history", OrderController.getHistory);
