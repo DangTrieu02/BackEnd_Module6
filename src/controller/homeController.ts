@@ -1,14 +1,17 @@
-import { Request, Response } from "express";
+// homeController.ts
+import {Request, Response} from "express";
 import homeService from "../services/homeService";
 import {UploadedFile} from "express-fileupload";
 import categoryService from "../services/categoryService";
 
 
 class HomeController {
-    constructor() {}
+    constructor() {
+    }
+
     createHome = async (req: Request, res: Response) => {
         try {
-            console.log(req.body,1111)
+            console.log(req.body, 1111)
             let homes = await homeService.createHome(req.body);
             return res.status(200).json(homes);
         } catch (e) {
@@ -52,18 +55,19 @@ class HomeController {
             const newHome = req.body;
             console.log(newHome, "at update");
 
-            const home = await homeService.updateHome(idHome,newHome);
+            const home = await homeService.updateHome(idHome, newHome);
             res.status(200).json(home);
         } catch (err) {
             console.log(err, "at updateHome controller");
         }
     }
+
     findAll = async (req: Request, res: Response) => {
         try {
             const listProduct = await homeService.getAllHome();
             res.status(200).json(listProduct);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({message: error.message});
         }
     };
 
@@ -112,7 +116,7 @@ class HomeController {
             const product = await homeService.findHomeById(id);
             res.status(200).json(product);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({message: error.message});
         }
     };
 
@@ -123,7 +127,7 @@ class HomeController {
             const products = await homeService.findByCategoryId(categoryId);
             res.status(200).json(products);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({message: error.message});
         }
     };
 
@@ -135,7 +139,7 @@ class HomeController {
             console.log(response)
             res.status(200).json(response);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({message: error.message});
         }
     };
 
@@ -147,20 +151,18 @@ class HomeController {
             const response = await homeService.findByPrice(min, max);
             res.status(200).json(response);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({message: error.message});
         }
     };
-
-
 
 
     changeHomeStatus = async (req: Request, res: Response) => {
         try {
             const id = Number(req.params.idHome);
             const newStatus = await homeService.changeHomeStatus(id);
-            res.status(200).json({ message: `Home status changed to ${newStatus}` });
+            res.status(200).json({message: `Home status changed to ${newStatus}`});
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({message: error.message});
         }
     };
 
@@ -171,14 +173,14 @@ class HomeController {
 
 
             if (!status) {
-                return res.status(400).json({ message: "Status missing" });
+                return res.status(400).json({message: "Status missing"});
             }
 
 
             const homes = await homeService.findByStatus(status);
             res.status(200).json(homes);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({message: error.message});
         }
     };
 
@@ -191,7 +193,7 @@ class HomeController {
                 message: "Delete success",
             });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({message: error.message});
         }
     };
 }

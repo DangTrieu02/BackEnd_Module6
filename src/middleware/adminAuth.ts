@@ -1,4 +1,4 @@
-// adminAuth-middleware.ts
+
 export const adminAuth = (req, res, next) =>{
     if (req.decode.role === 'admin') {
         next();

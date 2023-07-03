@@ -44,7 +44,7 @@ export class Home {
     @JoinColumn({name: "userId"})
     user: User;
 
-    @Column({ default: "available" })
+    @Column({default: "available"})
     status: string; // Possible values: "available", "hiring", "unavailable"
 
 }
