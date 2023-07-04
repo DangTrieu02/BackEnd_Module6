@@ -12,5 +12,7 @@ export class Category {
 
     @OneToMany(() => Home, (home) => home.category)
     home: Home[];
+    @Column({type:"text"} )
+    icon: string;
 
 }
